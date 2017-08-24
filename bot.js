@@ -22,6 +22,7 @@ bot.on('ready', function (evt) {
 });
 
 bot.on('message', function (user, userID, channelID, message, evt) {
+  // checking if the user has made an offering
   if (message.toLowerCase().indexOf('offering') != -1) {
     var message = 'Your tribute was... ';
     // roll a die for how good the offering was
@@ -69,7 +70,11 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     });
   }
 
-  if (message.toLowerCase().indexOf('apologize') != -1 || message.toLowerCase().indexOf('apology') != -1) {
+  // checking if the user has asked for forgiveness
+  if (message.toLowerCase().indexOf('apologize') != -1 ||
+      message.toLowerCase().indexOf('apology') != -1 ||
+      message.toLowerCase().indexOf('forgive') != -1 ||
+      message.toLowerCase().indexOf('forgiveness') != -1) {
     var result = Math.floor(Math.random() * 5);
     var message = '';
 
