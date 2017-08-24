@@ -4,6 +4,9 @@
   "description": "Hanzo bot",
   "main": "bot.js",
   "author": "Will Johnson",
+  "scripts": {
+    "start": "node bot.js"
+  },
   "dependencies": {
     "discord.io": "^2.5.2",
     "winston": "^2.3.1"

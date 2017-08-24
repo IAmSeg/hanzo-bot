@@ -21,6 +21,35 @@ bot.on('ready', function (evt) {
   logger.info(bot.username + ' - (' + bot.id + ')');
 });
 
+var offeringMessages = [
+  'a dishonor to yourself and to House Shimada. You should be ashamed.',
+  'disgraceful.',
+  'made in haste. Take your time to honor a great house.',
+  'in need of practice. Step into my dojo.',
+  'satisfactory.',
+  'pleasing, but you can do better.',
+  'a gift given in good favor.',
+  'honorable. My brother Genji would be proud.',
+  'very pleasing. I shall name my next arrow after your house.',
+  'truly worthy of a warrior. You honor yourself and House Shimada.',
+  'mind blowing. You are a great warrior and teammate. It is known.'
+];
+
+var apologyMessages = [
+  'Your sins have been forgiven.',
+  'You have wronged House Shimada. Shame shall fall upon your head.',
+  'Everyone falls. Not everyone can climb walls to get back up.',
+  'You have been enlightened. Go forth. See what the dragon sees.',
+  'No amount of flattery can repair the damage you have done.'
+];
+
+var helloMessages = [
+  'Greetings, Warrior ',
+  'Hi, ',
+  'It is an honor, ',
+  'The pleasure is mine, '
+];
+
 bot.on('message', function (user, userID, channelID, message, evt) {
   // checking if the user has made an offering
   if (message.toLowerCase().indexOf('offering') != -1) {
@@ -28,45 +57,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     // roll a die for how good the offering was
     var result = Math.floor(Math.random() * 11);
 
-    switch(result) {
-      case 0:
-        message += 'a dishonor to yourself and to House Shimada. You should be ashamed.';
-        break;
-      case 1:
-        message += 'disgraceful.';
-        break;
-      case 2:
-        message += 'made in haste. Take your time to honor a great house.';
-        break;
-      case 3:
-        message += 'in need of practice. Step into my dojo.';
-        break;
-      case 4:
-        message += 'satisfactory.';
-        break;
-      case 5:
-        message += 'pleasing, but you can do better.';
-        break;
-      case 6:
-        message += 'a gift given in good favor.';
-        break;
-      case 7:
-        message += 'honorable. My brother Genji would be proud.';
-        break;
-      case 8:
-        message += 'very pleasing. I shall name my next arrow after your house.';
-        break;
-      case 9:
-        message += 'truly worthy of a warrior. You honor yourself and House Shimada.';
-        break;
-      case 10:
-        message += 'mind blowing. You are a great warrior and teammate. It is known.';
-        break;
-    }
-
     bot.sendMessage({
       to: channelID,
-      message: message
+      message: message + offeringMessages[result]
     });
   }
 
@@ -75,30 +68,21 @@ bot.on('message', function (user, userID, channelID, message, evt) {
       message.toLowerCase().indexOf('apology') != -1 ||
       message.toLowerCase().indexOf('forgive') != -1 ||
       message.toLowerCase().indexOf('forgiveness') != -1) {
-    var result = Math.floor(Math.random() * 5);
-    var message = '';
 
-    switch (result) {
-      case 0:
-        message += 'Your sins have been forgiven.';
-        break;
-      case 1:
-        message += 'You have wronged House Shimada. Shame shall fall upon your head.';
-        break;
-      case 2:
-        message += 'Everyone falls. Not everyone can climb walls to get back up.';
-        break;
-      case 3:
-        message += 'You have been enlightened. Go forth. See what the dragon sees.';
-        break;
-      case 4:
-        message += 'No amount of flattery can repair the damage you have done.';
-        break;
-    }
+    var result = Math.floor(Math.random() * 5);
 
     bot.sendMessage({
       to: channelID,
-      message: message
+      message: apologyMessages[result]
+    });
+  }
+
+  if (message.toLowerCase().indexOf('hello') != -1) {
+
+    var result = Math.floor(Math.random() * 4);
+    bot.sendMessage({
+      to: channelID,
+      message: helloMessages[result] + user
     });
   }
 });
