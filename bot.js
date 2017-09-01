@@ -50,10 +50,36 @@ var helloMessages = [
   'The pleasure is mine, '
 ];
 
+var offeringTriggers = [
+  'offering',
+  'offer'
+];
+
+var apologyTriggers = [
+  'apologize',
+  'apology',
+  'forgive',
+  'forgiveness',
+  'sorry'
+];
+
+var helloTriggers = [
+  'hello',
+  'hi',
+  'hey'
+];
+
+var whatsBetterTriggers = [
+  'whats better'
+];
+
 bot.on('message', function (user, userID, channelID, message, evt) {
+  if (userID == 350043625620635648)
+    return;
+
   // checking if the user has made an offering
-  if (message.toLowerCase().indexOf('offering') != -1) {
-    var message = 'Your tribute was... ';
+  if (messageContainsTrigger(offeringTriggers, message)) {
+    var message = 'Your offering was... ';
     // roll a die for how good the offering was
     var result = Math.floor(Math.random() * 11);
 
@@ -64,11 +90,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
   }
 
   // checking if the user has asked for forgiveness
-  if (message.toLowerCase().indexOf('apologize') != -1 ||
-      message.toLowerCase().indexOf('apology') != -1 ||
-      message.toLowerCase().indexOf('forgive') != -1 ||
-      message.toLowerCase().indexOf('forgiveness') != -1) {
-
+  if (messageContainsTrigger(apologyTriggers, message)) {
     var result = Math.floor(Math.random() * 5);
 
     bot.sendMessage({
@@ -77,12 +99,84 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     });
   }
 
-  if (message.toLowerCase().indexOf('hello') != -1) {
-
+  if (messageContainsTrigger(helloTriggers, message)) {
     var result = Math.floor(Math.random() * 4);
     bot.sendMessage({
       to: channelID,
-      message: helloMessages[result] + user
+      message: helloMessages[result] + '<@' + userID + '>'
+    });
+  }
+
+  if (message.toLowerCase().indexOf('flip a coin') != -1) {
+    var result = Math.random();
+    var message = 'Tails.';
+    if (result < .5)
+      message = 'Heads.';
+
+    bot.sendMessage({
+      to: channelID,
+      message
+    });
+  }
+
+  if (message.indexOf('whats better') != -1 ||
+      message.indexOf('what\'s better') != -1 ||
+      message.indexOf('which is better') != -1) {
+    var result = Math.random();
+    var words = message.toLowerCase().split(' ');
+    var orIndex = words.indexOf('or');
+    // bad message format. return.
+    if (orIndex == 0 || orIndex == words.length - 1) {
+      message = 'Ask me a real question.';
+      bot.sendMessage({
+        to: channelID,
+        message
+      });
+      return;
+    }
+
+    var firstOption = words[orIndex - 1];
+    var secondOption = words[orIndex + 1];
+    if (firstOption != 'dragon' && firstOption != 'dragons' && secondOption != 'dragon' && secondOption != 'dragons') {
+      // message didnt contain 'dragon' or 'dragons' as an option
+      message = (Math.random() < .50 ? capitalize(firstOption) : capitalize(secondOption)) + '. But dragons are better than both.';
+      bot.sendMessage({
+        to: channelID,
+        message
+      });
+      return;
+    }
+
+    var otherOption = firstOption;
+    message = 'Dragons.'
+    if (firstOption == 'dragon' || firstOption == 'dragons')
+      otherOption = capitalize(stripPunc(secondOption));
+
+    if (result <= 0.03)
+      message = otherOption + '.';
+
+    bot.sendMessage({
+      to: channelID,
+      message
     });
   }
 });
+
+function messageContainsTrigger(triggers, message) {
+  var words = stripPunc(message.toLowerCase()).split(' ');
+  var result = false;
+  words.forEach(word => {
+    if (triggers.indexOf(word) != -1)
+      result = true;
+  });
+
+  return result;
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function stripPunc(string) {
+  return string.replace(/[.',\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+}
