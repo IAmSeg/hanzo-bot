@@ -178,5 +178,5 @@ function capitalize(string) {
 }
 
 function stripPunc(string) {
-  return string.replace(/[.',\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+  return string.replace(/[.',\/#!$%?\^&\*;:{}=\-_`~()]/g, '');
 }
