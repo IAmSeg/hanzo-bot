@@ -139,7 +139,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     var secondOption = words[orIndex + 1];
     if (firstOption != 'dragon' && firstOption != 'dragons' && secondOption != 'dragon' && secondOption != 'dragons') {
       // message didnt contain 'dragon' or 'dragons' as an option
-      message = (Math.random() < .50 ? capitalize(firstOption) : capitalize(secondOption)) + '. But dragons are better than both.';
+      message = (Math.random() < .50 ? capitalize(stripPunch(firstOption)) : capitalize(stripPunc(secondOption))) + '. But dragons are better than both.';
       bot.sendMessage({
         to: channelID,
         message
