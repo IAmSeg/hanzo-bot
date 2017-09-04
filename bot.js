@@ -119,14 +119,14 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     });
   }
 
-  if (message.indexOf('whats better') != -1 ||
-      message.indexOf('what\'s better') != -1 ||
-      message.indexOf('which is better') != -1) {
+  if (message.toLowerCase().indexOf('whats better') != -1 ||
+      message.toLowerCase().indexOf('what\'s better') != -1 ||
+      message.toLowerCase().indexOf('which is better') != -1) {
     var result = Math.random();
     var words = message.toLowerCase().split(' ');
     var orIndex = words.indexOf('or');
     // bad message format. return.
-    if (orIndex == 0 || orIndex == words.length - 1) {
+    if (orIndex == -1 || orIndex == 0 || orIndex == words.length - 1) {
       message = 'Ask me a real question.';
       bot.sendMessage({
         to: channelID,
